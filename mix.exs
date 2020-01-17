@@ -31,6 +31,7 @@ defmodule GraphiteAggregator.MixProject do
     [
       name: "GraphiteAggregator",
       files: ["lib", "mix.exs", "README.md"],
+      licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/StanAnsems/GraphiteAggregator"}
     ]
   end
