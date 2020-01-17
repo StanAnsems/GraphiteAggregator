@@ -9,7 +9,9 @@ defmodule GraphiteAggregator.MixProject do
       start_permanent: Mix.env() == :prod,
       description: description(),
       package: package(),
-      deps: deps()
+      deps: deps(),
+      name: "GraphiteAggregator",
+      source_url: "https://github.com/StanAnsems/GraphiteAggregator"
     ]
   end
 
@@ -27,7 +29,9 @@ defmodule GraphiteAggregator.MixProject do
 
   defp package() do
     [
-      files: ["lib", "mix.exs", "README.md"]
+      name: "GraphiteAggregator",
+      files: ["lib", "mix.exs", "README.md"],
+      links: %{"GitHub" => "https://github.com/StanAnsems/GraphiteAggregator"}
     ]
   end
 end
