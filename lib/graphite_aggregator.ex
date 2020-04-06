@@ -42,6 +42,16 @@ defmodule GraphiteAggregator do
   end
 
   def handle_info(:send_data, state = %{data: data}) do
+    data
+    |> Enum.chunk_every(5)
+    |> Enum.each(fn chunk ->
+      send_data(state, chunk)
+    end)
+
+    {:noreply, %{state | data: %{}}}
+  end
+
+  defp send_data(state, data) do
     packet =
       for {{ns, _}, {val, ts}} <- data, into: "" do
         pack_msg(state.prefix <> ns, val, ts)
@@ -56,8 +66,6 @@ defmodule GraphiteAggregator do
           :ok
       end
     end
-
-    {:noreply, %{state | data: %{}}}
   end
 
   defp pack_msg(ns, val, ts) do
