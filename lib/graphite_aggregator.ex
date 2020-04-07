@@ -25,6 +25,7 @@ defmodule GraphiteAggregator do
       host: Application.fetch_env!(:graphite_aggregator, :host) |> String.to_charlist(),
       port: Application.fetch_env!(:graphite_aggregator, :port),
       prefix: Application.fetch_env!(:graphite_aggregator, :prefix),
+      chunk_size: Application.get_env(:graphite_aggregator, :chunk_size, 5),
       data: %{}
     }
 
@@ -43,7 +44,7 @@ defmodule GraphiteAggregator do
 
   def handle_info(:send_data, state = %{data: data}) do
     data
-    |> Enum.chunk_every(5)
+    |> Enum.chunk_every(state.chunk_size)
     |> Enum.each(fn chunk ->
       send_data(state, chunk)
     end)
