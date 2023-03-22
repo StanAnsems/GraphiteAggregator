@@ -3,6 +3,7 @@ defmodule GraphiteAggregator do
   A GenServer to send metrics to graphite
   """
   use GenServer
+  require Logger
 
   @name __MODULE__
 
@@ -26,6 +27,7 @@ defmodule GraphiteAggregator do
       port: Application.fetch_env!(:graphite_aggregator, :port),
       prefix: Application.fetch_env!(:graphite_aggregator, :prefix),
       chunk_size: Application.get_env(:graphite_aggregator, :chunk_size, 5),
+      debug: Application.get_env(:graphite_aggregator, :debug, "false") == "true",
       data: %{}
     }
 
@@ -55,13 +57,16 @@ defmodule GraphiteAggregator do
   defp send_data(state, data) do
     packet =
       for {{ns, _}, {val, ts}} <- data, into: "" do
+        if (state.debug) do
+          Logger.info("ga | Send metric: #{ns} #{val} #{ts}")
+        end
         pack_msg(state.prefix <> ns, val, ts)
       end
 
     if packet != "" do
       case :gen_udp.send(state.socket, state.host, state.port, packet) do
         {:error, error} ->
-          IO.puts("Error when pushing graphite data #{inspect(error)}")
+          Logger.error("ga | Error when pushing graphite data #{inspect(error)}")
 
         :ok ->
           :ok
