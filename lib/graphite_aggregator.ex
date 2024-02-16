@@ -33,7 +33,7 @@ defmodule GraphiteAggregator do
   end
 
   def metric(namespace, value \\ 1, timestamp \\ System.os_time(:second)) do
-    send_metrics? = Application.get_env(:my_app, :send_metrics, true)
+    send_metrics? = Application.get_env(:graphite_aggregator, :send_metrics, true)
 
     if send_metrics? do
       GenServer.cast(@name, {:metric, namespace, value, timestamp})
