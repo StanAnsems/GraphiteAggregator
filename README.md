@@ -9,7 +9,7 @@ The package can be installed by adding `graphite_aggregator` to your list of dep
 ```elixir
 def deps do
   [
-    {:graphite_aggregator, "~> 0.0.1"}
+    {:graphite_aggregator, "~> 0.0.6"}
   ]
 end
 ```
